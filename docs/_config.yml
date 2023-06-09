@@ -28,7 +28,8 @@ github_username:  tkyksgwr
 
 # Build settings
 # theme: minima
-remote_theme: modernist
+# remote_theme: modernist
+remote_theme: "mmistakes/jekyll-theme-basically-basic@1.4.5"
 plugins:
   - jekyll-feed
 
