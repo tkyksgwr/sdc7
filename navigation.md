@@ -9,4 +9,4 @@
 [COLoRFUL❤️](e.md) -->
 
 <!-- [gimmick:Theme (inverse: true)](cerulean) -->
-[gimmick:Theme](united)
+[gimmick:Theme (inverse: true)](united)
