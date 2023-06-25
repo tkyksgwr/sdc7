@@ -1,6 +1,7 @@
 # SDC 7th
 
 [ホーム](index.md)
+[エントリー](entry.md)
 <!-- [決勝ラウンド](final.md)
 [えみっきょ](a.md)
 [pp(ピアニッシモ)](b.md)
