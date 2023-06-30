@@ -2,6 +2,7 @@
 
 [ホーム](index.md)
 [エントリー](entry.md)
+[チーム分け抽選](lottery.md)
 <!-- [決勝ラウンド](final.md)
 [えみっきょ](a.md)
 [pp(ピアニッシモ)](b.md)
