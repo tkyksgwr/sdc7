@@ -2,8 +2,8 @@
 
 [ホーム](index.md)
 [エントリー](entry.md)
-[チーム分け抽選](lottery.md)
-[チーム][team.md]
+[チーム](teams.md)
+[チーム抽選](lottery.md)
 
 <!-- [決勝ラウンド](final.md)
 [えみっきょ](a.md)
