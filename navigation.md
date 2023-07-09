@@ -1,9 +1,10 @@
 # SDC 7th
 
 [ホーム](index.md)
-[エントリー](entry.md)
 [チーム](teams.md)
-[チーム抽選](lottery.md)
+[チーム抽選組合わせ](lottery.md)
+[エントリー](entry.md)
+[大会要綱](outline.md)
 
 <!-- [決勝ラウンド](final.md)
 [えみっきょ](a.md)
