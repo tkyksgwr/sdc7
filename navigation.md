@@ -8,7 +8,7 @@
 
 <!-- [決勝ラウンド](final.md) -->
 [え～チーム](a.md)
-[B作)](b.md)
+[B作](b.md)
 [Achieve](c.md)
 [エヴァンゲリオン](d.md)
 [️Benissimo（ベニッシモ）](e.md)
