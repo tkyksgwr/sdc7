@@ -33,6 +33,8 @@ def main():
     # Num matches per team
     get_num_match_per_team(config, df)
 
+    # VS per team
+    parse_vs_per_team(config, df)
 
     # export to parsed.ini
     export_config(config)
@@ -62,8 +64,77 @@ def get_num_match_per_team(config, df):
         num_matches += len(df[df['チーム2'].str.contains(name)])
         config[team]['num_matches'] = str(num_matches)
 
-        # logging.debug('{}: {}'.format(team, len(df['チーム1'] == name)))
-        # print(df['チーム1'] == name)
+
+def parse_vs_per_team(config, df):
+    # Loop over teams
+    teams = config.get('defaults','Teams').splitlines()
+    logging.debug(teams)
+
+    for team in teams:
+        name = config[team]['Name']
+        logging.debug('{}: {}'.format(team, name))
+
+        others = get_others(team, teams)
+        logging.debug('Others: {}'.format(others))
+
+        df_team1 = df[df['チーム1'].str.contains(name)]
+        df_team2 = df[df['チーム2'].str.contains(name)]
+        logging.debug('df_team1')
+        logging.debug(df_team1)
+
+        # search others in opposite
+        for other in others:
+            name = config[other]['Name']
+            df_team1_others = df_team1[df_team1['チーム2'].str.contains(name)]
+            df_team2_others = df_team2[df_team2['チーム1'].str.contains(name)]
+            logging.debug('df_team1_others:')
+            logging.debug(df_team1_others)
+
+            num_win = 0
+            num_lose = 0
+            for index, row in df_team1_others.iterrows():
+                logging.debug(row)
+                logging.debug('row_game1: {}'.format(row['ゲーム1']))
+                logging.debug('row_game2: {}'.format(row['ゲーム2']))
+                # Tie break
+                if int(row['ゲーム1']) == 6 and int(row['ゲーム2']) == 6:
+                    if row['TB1'] > row['TB2']:
+                        num_win += 1
+                    else:
+                        num_lose += 1
+                elif int(row['ゲーム1']) > 5:
+                    num_win += 1
+                else:
+                    num_lose +=1
+
+            for index, row in df_team2_others.iterrows():
+                # Tie break
+                if int(row['ゲーム1']) == 6 and int(row['ゲーム2']) == 6:
+                    if row['TB1'] > row['TB2']:
+                        num_lose += 1
+                    else:
+                        num_win += 1
+                elif int(row['ゲーム1']) > 5:
+                    num_lose += 1
+                else:
+                    num_win +=1
+                
+            key_num_win = '_'.join(['vs', other, 'num','win'])
+            key_num_lose = '_'.join(['vs', other, 'num', 'lose'])
+
+            config[team][key_num_win] = str(num_win)
+            config[team][key_num_lose] = str(num_lose)
+
+
+def get_others(self, teams):
+    others = []
+    for team in teams:
+        if team == self:
+            continue
+        else:
+            others.append(team)
+    
+    return others
 
 
 def export_config(config):
