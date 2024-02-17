@@ -30,6 +30,26 @@ def main():
     # Matches
     config['defaults']['num_matches'] = str(df.shape[0])
 
+    # Num matches per team
+    get_num_match_per_team(config, df)
+
+
+    # export to parsed.ini
+    export_config(config)
+
+    #######
+    # df2 = df.sort_values('対戦日は？(省略すると本日)', ascending=False) # sort by date
+    # df3 = df2.fillna(' ') # fill NaN
+
+    # # dump team results
+    # if args.team:
+    #     get_team_results(df3)
+
+    # # dump results
+    # get_results(df3)
+
+
+def get_num_match_per_team(config, df):
     # Loop over teams
     teams = config.get('defaults','Teams').splitlines()
     logging.debug(teams)
@@ -44,19 +64,6 @@ def main():
 
         # logging.debug('{}: {}'.format(team, len(df['チーム1'] == name)))
         # print(df['チーム1'] == name)
-        # logging.debug('{}: {}'.format(team, len(df['チーム2'] == name)))
-
-
-    export_config(config)
-    # df2 = df.sort_values('対戦日は？(省略すると本日)', ascending=False) # sort by date
-    # df3 = df2.fillna(' ') # fill NaN
-
-    # # dump team results
-    # if args.team:
-    #     get_team_results(df3)
-
-    # # dump results
-    # get_results(df3)
 
 
 def export_config(config):
