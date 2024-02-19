@@ -87,6 +87,10 @@ def get_team2(config):
     return get_col(config, 8)
 
 
+def get_order(config):
+    return get_col(config, 9)
+
+
 def get_num_match_per_team(config, df):
     # Loop over teams
     teams = config.get('defaults','Teams').splitlines()
@@ -105,16 +109,18 @@ def get_num_match_per_team(config, df):
 
 
 def parse_vs_per_team(config, df):
-    # Loop over teams
     teams = config.get('defaults','Teams').splitlines()
     team1 = get_team1(config)
     team2 = get_team2(config)
+    doubles1 = get_doubles1(config)
+    doubles2 = get_doubles2(config)
     game1 = get_game1(config)
     game2 = get_game2(config)
     tb1 = get_tb1(config)
     tb2 = get_tb2(config)
+    order = get_order(config)
 
-
+    # Loop over teams
     for team in teams:
         name = config[team]['Name']
         logging.debug('{}: {}'.format(team, name))
@@ -138,9 +144,22 @@ def parse_vs_per_team(config, df):
             num_win = 0
             num_lose = 0
             for index, row in df_team1_others.iterrows():
-                logging.debug(row)
+                logging.debug('row{}: {}'.format(index, row))
                 logging.debug('row_game1: {}'.format(row[game1]))
                 logging.debug('row_game2: {}'.format(row[game2]))
+
+                nox = row[order]
+                key_nox_self = '_'.join(['vs', other, nox, 'self'])
+                config[team][key_nox_self] = row[doubles1]
+                key_nox_opponent = '_'.join(['vs', other, nox, 'opponent'])
+                config[team][key_nox_opponent] = row[doubles2]
+                key_nox_score = '_'.join(['vs', other, nox, 'score'])
+                score = '-'.join([str(row[game1]), str(row[game2])])
+                if not pd.isna(row[tb1]):
+                    tb_score = '-'.join([str(int(row[tb1])), str(int(row[tb2]))])
+                    tb_score = '(' + tb_score + ')'
+                    score = score + tb_score
+                config[team][key_nox_score] = score
 
                 if is_win1(config, row):
                     num_win += 1
@@ -148,13 +167,26 @@ def parse_vs_per_team(config, df):
                     num_lose += 1
 
             for index, row in df_team2_others.iterrows():
+                nox = row[order]
+                key_nox_self = '_'.join(['vs', other, nox, 'self'])
+                config[team][key_nox_self] = row[doubles2]
+                key_nox_opponent = '_'.join(['vs', other, nox, 'opponent'])
+                config[team][key_nox_opponent] = row[doubles1]
+                key_nox_score = '_'.join(['vs', other, nox, 'score'])
+                score = '-'.join([str(row[game2]), str(row[game1])])
+                if not pd.isna(row[tb1]):
+                    tb_score = '-'.join([str(int(row[tb2])), str(int(row[tb1]))])
+                    tb_score = '(' + tb_score + ')'
+                    score = score + tb_score
+                config[team][key_nox_score] = score
+
                 if is_win1(config, row):
                     num_lose += 1
                 else:
                     num_win += 1
                 
-            key_num_win = '_'.join(['vs', other, 'num','win'])
-            key_num_lose = '_'.join(['vs', other, 'num', 'lose'])
+            key_num_win = '_'.join(['vs', other, 'num_win'])
+            key_num_lose = '_'.join(['vs', other, 'num_lose'])
 
             config[team][key_num_win] = str(num_win)
             config[team][key_num_lose] = str(num_lose)
