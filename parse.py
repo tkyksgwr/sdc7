@@ -36,6 +36,9 @@ def main():
     # VS per team
     parse_vs_per_team(config, df)
 
+    # export markdown per team
+    export_md_per_team(config)
+
     # export to parsed.ini
     export_config(config)
 
@@ -221,6 +224,56 @@ def get_others(self, teams):
             others.append(team)
     
     return others
+
+
+def export_md_per_team(config):
+    teams = config.get('defaults','Teams').splitlines()
+    orders = config.get('defaults','Orders').splitlines()
+
+    # Loop over teams
+    for team in teams:
+        lines = []
+        name = config[team]['Name']
+        line = '# {}\n\n'.format(name)
+        lines.append(line)
+
+        others = get_others(team, teams)
+        for other in others:
+            other_name = config[other]['Name']
+            logging.debug('vs {}'.format(other_name))
+
+            key_num_win = '_'.join(['vs', other, 'num_win'])
+            if key_num_win in config[team]:
+                num_win = config[team][key_num_win]
+                logging.debug('num_win: {}'.format(num_win)) 
+            key_num_lose = '_'.join(['vs', other, 'num_lose'])
+            if key_num_lose in config[team]:
+                num_lose = config[team][key_num_lose]
+                logging.debug('num_lose: {}'.format(num_lose)) 
+
+            line = '## vs {} {}勝{}敗\n\n'.format(other_name, num_win, num_lose)
+            lines.append(line)
+
+            for order in orders:
+                key_self = '_'.join(['vs', other, order, 'self'])
+                if key_self in config[team]:
+                    self = config[team][key_self]
+
+                    key_score = '_'.join(['vs', other, order, 'score'])
+                    score = config[team][key_score]
+
+                    key_opponent = '_'.join(['vs', other, order, 'opponent'])
+                    opponent = config[team][key_opponent]
+                
+                    logging.debug('| {} | {} | {} |'.format(self, score, opponent))
+                    line = '| {} | {} | {} | {} |\n'.format(order, self, score, opponent)
+                    lines.append(line)
+            
+            lines.append('\n')
+
+        fname = team + '.md'
+        with open(fname, mode='w') as f:
+            f.writelines(lines)
 
 
 def export_config(config):
