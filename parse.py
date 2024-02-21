@@ -275,6 +275,10 @@ def export_md_per_team(config):
             line = '## vs {} {}勝{}敗\n\n'.format(other_name, num_win, num_lose)
             lines.append(line)
 
+            # table header is mandatory
+            lines.append('|   |   |   |   |\n')
+            lines.append('|---|---|---|---|\n')
+
             for order in orders:
                 key_self = '_'.join(['vs', other, order, 'self'])
                 if key_self in config[team]:
