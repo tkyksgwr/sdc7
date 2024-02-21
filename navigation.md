@@ -13,6 +13,7 @@
 [エヴァンゲリオン](TeamD.md)
 [️Benissimo（ベニッシモ）](TeamE.md)
 [️TEAM FOCS](TeamF.md)
+[試合結果](results.md)
 
 <!-- [gimmick:Theme (inverse: true)](cerulean) -->
 [gimmick:Theme (inverse: true)](united)
