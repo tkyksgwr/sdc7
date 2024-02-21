@@ -7,12 +7,12 @@
 [大会要綱](outline.md)
 
 <!-- [決勝ラウンド](final.md) -->
-[え～チーム](a.md)
-[B作](b.md)
-[Achieve](c.md)
-[エヴァンゲリオン](d.md)
-[️Benissimo（ベニッシモ）](e.md)
-[️TEAM FOCS](f.md)
+[え～チーム](TeamA.md)
+[B作](TeamB.md)
+[Achieve](TeamC.md)
+[エヴァンゲリオン](TeamD.md)
+[️Benissimo（ベニッシモ）](TeamE.md)
+[️TEAM FOCS](TeamF.md)
 
 <!-- [gimmick:Theme (inverse: true)](cerulean) -->
 [gimmick:Theme (inverse: true)](united)
