@@ -39,6 +39,9 @@ def main():
     # export markdown per team
     export_md_per_team(config)
 
+    # export all results as markdown
+    export_md_results(config, df)
+
     # export to parsed.ini
     export_config(config)
 
@@ -56,6 +59,10 @@ def main():
 
 def get_col(config, idx):
     return config['defaults']['columns'].splitlines()[idx]
+
+
+def get_date(config):
+    return get_col(config, 0)
 
 
 def get_team1(config):
@@ -195,6 +202,20 @@ def parse_vs_per_team(config, df):
             config[team][key_num_lose] = str(num_lose)
 
 
+def get_score(config, row):
+    game1 = get_game1(config)
+    game2 = get_game2(config)
+    tb1 = get_tb1(config)
+    tb2 = get_tb2(config)
+
+    score = '-'.join([str(row[game1]), str(row[game2])])
+    if not pd.isna(row[tb1]):
+        tb_score = '-'.join([str(int(row[tb1])), str(int(row[tb2]))])
+        tb_score = '(' + tb_score + ')'
+        score = score + tb_score
+    
+    return score
+
 def is_win1(config, row):
     ''' True if doubles1 win, False if lose
     '''
@@ -272,6 +293,44 @@ def export_md_per_team(config):
             lines.append('\n')
 
         fname = team + '.md'
+        with open(fname, mode='w') as f:
+            f.writelines(lines)
+
+
+def export_md_results(config, df):
+    date = get_date(config)
+    team1 = get_team1(config)
+    team2 = get_team2(config)
+    doubles1 = get_doubles1(config)
+    doubles2 = get_doubles2(config)
+    game1 = get_game1(config)
+    game2 = get_game2(config)
+    tb1 = get_tb1(config)
+    tb2 = get_tb2(config)
+    order = get_order(config)
+
+    # Loop over df
+    lines = []
+    lines.append('# 試合結果\n')
+    lines.append('\n')
+    lines.append('| 対戦日 | チーム | ペア   | スコア | 相手ペア | 相手チーム | オーダー |\n')
+    lines.append('| :---- | ----: | ----: | :---: | :------ | :------- | :------ |\n')
+
+    for index, row in df.iterrows():
+        score = get_score(config, row)
+
+        line = '| {} | {} | {} | {} | {} | {} | {} |\n'.format(
+            row[date],
+            row[team1],
+            row[doubles1],
+            score,
+            row[doubles2],
+            row[team2],
+            row[order]
+        )
+        lines.append(line)
+
+        fname = 'results.md'
         with open(fname, mode='w') as f:
             f.writelines(lines)
 
